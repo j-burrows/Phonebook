@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phonebook", "Phonebook\Phonebook.csproj", "{58433A83-AF14-4037-B39C-130110CC8673}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phonebook.Tests", "Phonebook.Tests\Phonebook.Tests.csproj", "{45926244-7986-4511-8E14-BC7CB5E2486F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58433A83-AF14-4037-B39C-130110CC8673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58433A83-AF14-4037-B39C-130110CC8673}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58433A83-AF14-4037-B39C-130110CC8673}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58433A83-AF14-4037-B39C-130110CC8673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45926244-7986-4511-8E14-BC7CB5E2486F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45926244-7986-4511-8E14-BC7CB5E2486F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45926244-7986-4511-8E14-BC7CB5E2486F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45926244-7986-4511-8E14-BC7CB5E2486F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

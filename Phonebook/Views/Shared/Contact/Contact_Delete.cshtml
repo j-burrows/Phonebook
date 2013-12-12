@@ -1,0 +1,16 @@
+﻿@model PhoneBookLib.Business.BContact
+@using Repository.Business.Protocols
+@using Mailbox.Helpers
+
+@{Model.Format();}
+
+@using(Html.BeginForm("Contact_Delete", "Home", FormMethod.Post, 
+    new{ 
+        id = "ContactDelete_" + Model.Contact_ID,
+        @class = "ContactDelete PartialUpdateForm"
+    })){
+    @Model.Contact_ID_Rules.Delete.HtmlInput(Model.Contact_ID)
+    @Model.username_Rules.Delete.HtmlInput(Model.username)
+    
+    <input type="submit" value="Delete Contact" />
+}

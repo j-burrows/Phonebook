@@ -1,0 +1,13 @@
+﻿@model PhoneBookLib.Business.BContact
+
+@{Model.Format();}
+
+<section id="ContactView_@Model.Contact_ID" class="ContactView">
+    First Name: @Model.First_Name
+    <br />
+    Last Name: @Model.Last_Name
+    <br />
+    Middle Initial: @Model.Middle_Initial
+    <br />
+    Relation: @Model.Relation
+</section>

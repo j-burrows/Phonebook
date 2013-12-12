@@ -1,0 +1,15 @@
+﻿@model PhoneBookLib.Business.BEmail
+@using Repository.Business.Protocols
+@using Mailbox.Helpers
+
+@{Model.Format();}
+
+@using(Html.BeginForm("Email_Delete", "Home", FormMethod.Post, 
+    new{ 
+        @id = "EmailDelete_" + Model.Email_ID,
+        @class = "EmailDelete PartialUpdateForm"
+    })){
+    @Model.Email_ID_Rules.Delete.HtmlInput(Model.Email_ID)
+    @Model.Contact_ID_Rules.Delete.HtmlInput(Model.Contact_ID)    
+    <input type="submit" value="Delete Email" />
+}

@@ -1,0 +1,20 @@
+﻿@model PhoneBookLib.Business.BContact
+@using Repository.Business.Protocols
+@using Mailbox.Helpers
+
+@{Model.Format();}
+
+@using(Html.BeginForm("Contact_Update", "Home", FormMethod.Post, 
+    new{ 
+        @id = "ContactUpdate_" + Model.Contact_ID,
+        @class = "ContactUpdate PartialUpdateForm"
+    })){
+    @Model.Contact_ID_Rules.Update.HtmlInput(Model.Contact_ID)
+    @Model.username_Rules.Update.HtmlInput(Model.username)
+    @Model.First_Name_Rules.Update.HtmlInput(Model.First_Name)
+    @Model.Last_Name_Rules.Update.HtmlInput(Model.Last_Name)
+    @Model.Middle_Initial_Rules.Update.HtmlInput(Model.Middle_Initial)
+    @Model.Relation_Rules.Update.HtmlInput(Model.Relation)
+
+    <input type="submit" value="Update Contact" />
+}

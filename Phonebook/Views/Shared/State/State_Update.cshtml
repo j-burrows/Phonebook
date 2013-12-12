@@ -1,0 +1,19 @@
+﻿@model PhoneBookLib.Business.BState
+@using Repository.Business.Protocols
+@using Mailbox.Helpers
+
+@{Model.Format();}
+
+@using(Html.BeginForm("State_Update", "Home", FormMethod.Post, 
+    new{ 
+        @id = "StateUpdate_" + Model.State_ID,
+        @class="StateUpdate PartialUpdateForm"
+    })){
+    @Model.Country_ID_Rules.Update.HtmlInput(Model.Country_ID)
+    @Model.State_ID_Rules.Update.HtmlInput(Model.State_ID)
+    @Model.Place_ID_Rules.Update.HtmlInput(Model.Place_ID)
+    @Model.Long_Name_Rules.Update.HtmlInput(Model.Long_Name)
+    @Model.Short_Name_Rules.Update.HtmlInput(Model.Short_Name)
+    
+    <input type="submit" value="Update State" />
+}

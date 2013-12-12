@@ -1,0 +1,15 @@
+﻿@model PhoneBookLib.Business.BPlace
+@using Repository.Business.Protocols
+@using Mailbox.Helpers
+
+@{Model.Format();}
+
+@using(Html.BeginForm("Place_Delete", "Home", FormMethod.Post, 
+    new{ 
+        @id = "PlaceDelete_" + Model.Place_ID,
+        @class="PlaceDelete PartialUpdateForm"
+    })){
+    @Model.Place_ID_Rules.Delete.HtmlInput(Model.Place_ID)
+    
+    <input type="submit" value="Delete Place" />
+}

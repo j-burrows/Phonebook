@@ -1,0 +1,17 @@
+﻿@model PhoneBookLib.Business.BState
+@using Repository.Business.Protocols
+@using Mailbox.Helpers
+
+@{Model.Format();}
+
+@using(Html.BeginForm("State_Delete", "Home", FormMethod.Post, 
+    new{
+        @id = "StateDelete_" + Model.State_ID,
+        @class="StateDelete PartialUpdateForm"
+    })){
+    @Model.Country_ID_Rules.Delete.HtmlInput(Model.Country_ID)
+    @Model.State_ID_Rules.Delete.HtmlInput(Model.State_ID)
+    @Model.Place_ID_Rules.Delete.HtmlInput(Model.Place_ID)
+    
+    <input type="submit" value="Delete Place" />
+}

@@ -1,0 +1,15 @@
+﻿@model PhoneBookLib.Business.BAddress
+
+@{Model.Format();}
+
+<section id="AddressView_@Model.Address_ID" class="AddressView">
+    Apartment Number: @Model.Apartment_Number
+    <br />
+    Street Number: @Model.Street_Number
+    <br />
+    Street Name: @Model.Street_Name
+    <br />
+    City: @Model.City
+    <br />
+    Postal Code: @Model.Postal_Code
+</section>

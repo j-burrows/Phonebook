@@ -1,0 +1,9 @@
+﻿@model PhoneBookLib.Business.BPhoneAddress
+
+@{Model.Format();}
+
+<section id="PhoneAddressView_@Model.PhoneAddress_ID" class="PhoneAddressView">
+    Phone Number: 
+    @(Model.Area_Code == 0? "" : "(" + Model.Area_Code.ToString() + ") ")
+    @Model.Remote_Address - @Model.Local_Address
+</section>

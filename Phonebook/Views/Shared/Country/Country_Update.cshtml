@@ -1,0 +1,18 @@
+﻿@model PhoneBookLib.Business.BCountry
+@using Repository.Business.Protocols
+@using Mailbox.Helpers
+
+@{Model.Format();}
+
+@using(Html.BeginForm("Country_Update", "Home", FormMethod.Post, 
+    new{ 
+        @id = "CountryUpdate_" + Model.Country_ID,
+        @class = "CountryUpdate PartialUpdateForm"
+    })){
+    @Model.Country_ID_Rules.Update.HtmlInput(Model.Country_ID)
+    @Model.Place_ID_Rules.Update.HtmlInput(Model.Place_ID)
+    @Model.Long_Name_Rules.Update.HtmlInput(Model.Long_Name)
+    @Model.Short_Name_Rules.Update.HtmlInput(Model.Short_Name)
+    
+    <input type="submit" value="Update Country" />
+}

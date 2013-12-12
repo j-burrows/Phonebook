@@ -1,0 +1,17 @@
+﻿@model PhoneBookLib.Business.BPlace
+@using Repository.Business.Protocols
+@using Mailbox.Helpers
+
+@{Model.Format();}
+
+@using(Html.BeginForm("Place_Create", "Home", FormMethod.Post, 
+    new{
+        @id = "PlaceCreate_" + Model.Place_ID,
+        @class="PlaceCreate PartialUpdateForm"
+    })){
+    @Model.Place_ID_Rules.Create.HtmlInput(Model.Place_ID)
+    @Model.Long_Name_Rules.Create.HtmlInput(Model.Long_Name)
+    @Model.Short_Name_Rules.Create.HtmlInput(Model.Short_Name)
+    
+    <input type="submit" value="Create Place" />
+}

@@ -1,0 +1,21 @@
+﻿@model PhoneBookLib.Business.BAddress
+@using Repository.Business.Protocols
+@using Mailbox.Helpers
+
+@{Model.Format();}
+
+@using (Html.BeginForm("Address_Update", "Home", FormMethod.Post, 
+    new{ 
+        @id = "AddressUpdate_" + Model.Address_ID,
+        @class = "AddressUpdate PartialUpdateForm"
+    })) {     
+    @Model.Contact_ID_Rules.Update.HtmlInput(Model.Contact_ID)
+    @Model.Address_ID_Rules.Update.HtmlInput(Model.Address_ID)
+    @Model.Apartment_Number_Rules.Update.HtmlInput(Model.Apartment_Number)
+    @Model.Street_Number_Rules.Update.HtmlInput(Model.Street_Number)
+    @Model.Street_Name_Rules.Update.HtmlInput(Model.Street_Name)
+    @Model.City_Rules.Update.HtmlInput(Model.City)
+    @Model.Postal_Code_Rules.Update.HtmlInput(Model.Postal_Code)
+
+    <input type="submit" value="Update Address" />
+}

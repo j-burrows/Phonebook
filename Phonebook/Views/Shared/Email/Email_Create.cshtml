@@ -1,0 +1,16 @@
+﻿@model PhoneBookLib.Business.BEmail
+@using Repository.Business.Protocols
+@using Mailbox.Helpers
+
+@{Model.Format();}
+
+@using(Html.BeginForm("Email_Create", "Home", FormMethod.Post, 
+    new{ 
+        @id = "EmailCreate_" + Model.Email_ID,
+        @class = "EmailCreate PartialUpdateForm"
+    })){
+    @Model.Contact_ID_Rules.Create.HtmlInput(Model.Contact_ID)
+    @Model.Url_Rules.Create.HtmlInput(Model.Url)
+    
+    <input type="submit" value="Create Email" />
+}

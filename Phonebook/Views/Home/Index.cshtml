@@ -1,0 +1,398 @@
+﻿@model Phonebook.Models.HomeIndexViewModel
+@using Repository.Business.Protocols
+@{var contact = new PhoneBookLib.Business.BContact();}
+@{var phoneNumber = new PhoneBookLib.Business.BPhoneAddress();}
+@{var email = new PhoneBookLib.Business.BEmail();}
+@{var address = new PhoneBookLib.Business.BAddress();}
+
+@section LogoffButton{
+    @Html.Partial("LogoffButton")
+}
+
+@section NavStyle{
+    <style>
+    @{int i = 0;}
+    @foreach (var row in Model.navSection)
+    {
+        i++;
+        <text> #navRow_@i .navLink{ width: @((double)(99.8 - row.Count() * 0.4) / row.Count())%; } </text>
+    }
+    </style>
+}
+
+@section NavSection{
+    @Html.Partial("NavSection", Model.navSection)
+}
+
+<div id="contactGrid"></div>
+
+@section scripts{
+<script>
+    $(function () {
+        $('#contactGrid').kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: "@Url.Content("~/Home/Contact_GetForUser")",
+                        type: "POST"
+                    },
+                    create:{
+                        url: "@Url.Content("~/Home/Contact_Create")",
+                        type: "POST",
+                        dataType: "json",
+                        contentType: "application/json"
+                    },
+                    update:{
+                        url: "@Url.Content("~/Home/Contact_Update")",
+                        type: "POST",
+                        dataType: "json",
+                        contentType: "application/json"
+                    },
+                    destroy:{
+                        url: "@Url.Content("~/Home/Contact_Delete")",
+                        type: "POST",
+                        dataType: "json",
+                        contentType: "application/json"
+                    },
+                    parameterMap: function(data, type){
+                        return kendo.stringify(data);
+                    }
+                },
+                batch: true,
+                schema: {
+                    model: {
+                        id: "Contact_ID",
+                        fields: {
+                            @contact.Contact_ID_Rules.KendoField(),
+                            @contact.username_Rules.KendoField(null, User.Identity.Name),
+                            @contact.First_Name_Rules.KendoField(),
+                            @contact.Last_Name_Rules.KendoField(),
+                            @contact.Middle_Initial_Rules.KendoField(),
+                            @contact.Relation_Rules.KendoField(),
+                            phoneAddresses:{type:"array"},
+                            emails:{type:"array"},
+                            addresses:{type:"array"}
+                    }
+                }
+            },
+            pageSize: 10
+        },
+        columns: [ {
+            @contact.Contact_ID_Rules.KendoColumn()
+        }, {
+            @contact.username_Rules.KendoColumn()
+        }, {
+            @contact.First_Name_Rules.KendoColumn()
+        }, {
+            @contact.Last_Name_Rules.KendoColumn()
+        }, {
+            @contact.Middle_Initial_Rules.KendoColumn()
+        }, {
+            @contact.Relation_Rules.KendoColumn()
+        },{
+            field: "phoneAddresses",
+            template: function(row){
+                return row.phoneAddresses == null || row.phoneAddresses.length == 0? 
+                    "" :
+                    "View " + row.phoneAddresses.length + " #'s"
+            },
+            editor: function(container, options){
+                $('<div id="window"></div>')
+                    .appendTo(container)
+                    .kendoWindow({
+                        width: "84%",
+                        title: "Phone Numbers",
+                        visible: false,
+                        modal: true,
+                        close: function () {
+                            $('#contactGrid').data('kendoGrid').closeCell();
+                            $('#phoneNumberGrid').data('kendoGrid').destroy();
+                            $('#phoneNumberGrid').remove();
+                        }
+                    });
+
+                $('<div id="phoneNumberGrid"></div>')
+                    .appendTo($('#window'))
+                    .kendoGrid({
+                        dataSource: {
+                            //data: options.model.phoneAddresses,
+                            transport:{
+                                read: function(results){
+                                    results.success(options.model.phoneAddresses);
+                                },
+                                create: function(phoneOptions){
+                                    $.ajax({
+                                        url: "@Url.Content("~/Home/PhoneAddress_Create")",
+                                        type: "POST",
+                                        dataType: "json",
+                                        contentType: "application/json",
+                                        data: kendo.stringify({models: phoneOptions.data.models}),
+                                        success: function(result){
+                                            phoneOptions.success(result);
+                                        },
+                                        error: function(result){ 
+                                            phoneOptions.error(result);
+                                        }
+                                    });
+                                },
+                                update:function(phoneOptions){
+                                    $.ajax({
+                                        url: "@Url.Content("~/Home/PhoneAddress_Update")",
+                                        type: "POST",
+                                        dataType: "json",
+                                        contentType: "application/json",
+                                        data: kendo.stringify({models: phoneOptions.data.models}),
+                                        success: function(result){
+                                            phoneOptions.success(result);
+                                        },
+                                        error: function(result){ 
+                                            phoneOptions.error(result);
+                                        }
+                                    });
+                                },
+                                destroy:function(phoneOptions){
+                                    $.ajax({
+                                        url: "@Url.Content("~/Home/PhoneAddress_Delete")",
+                                        type: "POST",
+                                        dataType: "json",
+                                        contentType: "application/json",
+                                        data: kendo.stringify({models: phoneOptions.data.models}),
+                                        success: function(result){
+                                            phoneOptions.success(result);
+                                        },
+                                        error: function(result){ 
+                                            phoneOptions.error(result);
+                                        }
+                                    });
+                                },
+                                parameterMap: function(data, type){
+                                    return kendo.stringify(data);
+                                }
+                            },
+                            schema:{
+                                model:{
+                                    id: "PhoneAddress_ID",
+                                    fields:{
+                                        PhoneAddress_ID:{type: "number"},
+                                        Contact_ID:{
+                                            type: "number",
+                                            defaultValue: options.model.Contact_ID
+                                        },
+                                        Area_Code:{type: "number"},
+                                        Remote_Address:{type: "number"},
+                                        Local_Address:{type: "number"}
+                                    }
+                                }
+                            },
+                            batch: true
+                        },
+                        columns:[{
+                            @phoneNumber.PhoneAddress_ID_Rules.KendoColumn()
+                        },{
+                            @phoneNumber.Contact_ID_Rules.KendoColumn()
+                        },{
+                            @phoneNumber.Area_Code_Rules.KendoColumn()
+                        },{
+                            @phoneNumber.Remote_Address_Rules.KendoColumn()
+                        },{
+                            @phoneNumber.Local_Address_Rules.KendoColumn()
+                        },{
+                            command: [{
+                                name: "destroy",
+                                text: ""
+                            }],
+                            width: "6rem"
+                        }],
+                        editable: true,
+                        selectable: true,
+                        pageSize: 10,
+                        pageable: true,
+                        navigatable: true,
+                        toolbar: [
+                            "create",
+                            "save",
+                            "cancel"
+                        ]
+                    });
+
+                $('#window').data('kendoWindow').center().open();
+            }
+        },{
+            field: "emails",
+            template: function(row){
+                return row.emails == null || row.emails.length == 0? 
+                    "" :
+                    "View " + row.emails.length + " emails"
+            },
+            editor: function(container, options){
+                $('<div id="emailWindow"></div>')
+                    .appendTo(container)
+                    .kendoWindow({
+                        width: "84%",
+                        title: "Emails",
+                        visible: false,
+                        modal: true,
+                        close: function () {
+                            $('#contactGrid').data('kendoGrid').closeCell();
+                            $('#emailGrid').data('kendoGrid').destroy();
+                            $('#emailGrid').remove();
+                        }
+                    });
+
+                $('<div id="emailGrid"></div>')
+                    .appendTo($('#emailWindow'))
+                    .kendoGrid({
+                        dataSource: {
+                            data: options.model.phoneAddresses
+                        },
+                        columns:[{
+                            @email.Email_ID_Rules.KendoColumn()
+                        },{
+                            @email.Url_Rules.KendoColumn()
+                        }],
+                        editable: true,
+                        selectable: true,
+                        pageSize: 10,
+                        pageable: true,
+                        navigatable: true,
+                        toolbar: [
+                            "create",
+                            "save",
+                            "cancel"
+                        ]
+                    });
+
+                $('#emailWindow').data('kendoWindow').center().open();
+            }
+        },{
+            field: "addresses",
+            template: function(row){
+                return row.addresses == null || row.addresses.length == 0? 
+                    "" :
+                    "View " + row.addresses.length + " #'s"
+            },
+            editor: function(container, options){
+                $('<div id="addressWindow"></div>')
+                    .appendTo(container)
+                    .kendoWindow({
+                        width: "84%",
+                        title: "Addresses",
+                        visible: false,
+                        modal: true,
+                        close: function () {
+                            $('#contactGrid').data('kendoGrid').closeCell();
+                            $('#addressGrid').data('kendoGrid').destroy();
+                            $('#addressGrid').remove();
+                        }
+                    });
+
+                $('<div id="addressGrid"></div>')
+                    .appendTo($('#addressWindow'))
+                    .kendoGrid({
+                        dataSource: {
+                            data: options.model.addresses,
+                            schema:{
+                                model:{
+                                    fields:{
+                                        @address.Address_ID_Rules.KendoField(),
+                                        @address.Contact_ID_Rules.KendoField(),
+                                        @address.Apartment_Number_Rules.KendoField(),
+                                        @address.Street_Number_Rules.KendoField(),
+                                        @address.Street_Name_Rules.KendoField(),
+                                        @address.City_Rules.KendoField(),
+                                        @address.Postal_Code_Rules.KendoField(),
+                                        @address.State_ID_Rules.KendoField(),
+                                        State_Name:{type:"string"}
+                                    }
+                                }
+                            }
+                        },
+                        columns:[{
+                            @address.Address_ID_Rules.KendoColumn()
+                        },{
+                            @address.Contact_ID_Rules.KendoColumn()
+                        },{
+                            @address.Apartment_Number_Rules.KendoColumn()
+                        },{
+                            @address.Street_Number_Rules.KendoColumn()
+                        },{
+                            @address.Street_Name_Rules.KendoColumn()
+                        },{
+                            @address.City_Rules.KendoColumn()
+                        },{
+                            @address.Postal_Code_Rules.KendoColumn()
+                        },{
+                            field: "State_Name",
+                            editor: function(container, options){
+                                $('<input id="stateDropdown" />')
+                                    .appendTo(container)
+                                    .kendoDropDownList({
+                                        dataSource:{
+                                            transport: {
+                                                read:{
+                                                    url: "@Url.Content("~/Home/State_GetByCountry")",
+                                                    type: "POST",
+                                                    dataType: "json",
+                                                    contentType: "application/json",
+                                                    data: kendo.stringify({Country_ID: options.model.Country_ID})
+                                                },
+                                                parameterMap: function(data, type){
+                                                    return kendo.stringify(data);
+                                                }
+                                            },
+                                            schema: {
+                                                model: {
+                                                    id: "State_ID",
+                                                    fields: {
+                                                        State_ID: {type: "number"},
+                                                        Long_Name: {type: "string"}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        index: 0,
+                                        dataTextField: "Long_Name",
+                                        dataValueField: "State_ID",
+                                        change: function(){
+                                            options.model.set('State_Name', this.text());
+                                            options.model.set('State_ID', this.value());
+                                        }
+                                    });
+                            }
+                        },{
+                            @address.Country_ID_Rules.KendoColumn()
+                        }],
+                        editable: true,
+                        selectable: true,
+                        pageSize: 10,
+                        pageable: true,
+                        navigatable: true,
+                        toolbar: [
+                            "create",
+                            "save",
+                            "cancel"
+                        ]
+                    });
+
+                $('#addressWindow').data('kendoWindow').center().open();
+            }
+        },{
+            command: [{
+                name: "destroy",
+                text: ""
+            }],
+            width: "6rem"
+        }],
+        editable: true,
+        selectable: true,
+        pageable: true,
+        navigatable: true,
+        toolbar: [
+            "create",
+            "save",
+            "cancel"
+        ]
+    });
+});
+</script>
+}
